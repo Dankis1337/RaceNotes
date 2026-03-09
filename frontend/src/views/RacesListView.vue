@@ -14,6 +14,7 @@ const setupsStore = useSetupsStore()
 const statusFilter = ref('')
 const typeFilter = ref('')
 const setupFilter = ref('')
+const dismissedReminder = ref(false)
 
 const setupOptions = computed(() => {
   const opts = [{ label: 'All', value: '' }]
@@ -81,17 +82,22 @@ function onSetupChange(val) {
     <p class="text-gray-500 text-sm mb-4">Your race diary</p>
 
     <div
-      v-if="yesterdayIncomplete.length"
+      v-if="yesterdayIncomplete.length && !dismissedReminder"
       class="bg-accent rounded-xl p-3 mb-4 text-sm"
     >
       You have {{ yesterdayIncomplete.length }} race(s) from yesterday without results.
-      <router-link
-        v-if="yesterdayIncomplete.length === 1"
-        :to="`/races/${yesterdayIncomplete[0].id}`"
-        class="text-primary font-medium underline ml-1"
-      >
-        Fill in results
-      </router-link>
+      <div class="flex gap-3 mt-2">
+        <router-link
+          v-if="yesterdayIncomplete.length === 1"
+          :to="`/races/${yesterdayIncomplete[0].id}`"
+          class="text-primary font-medium underline"
+        >
+          Fill in results
+        </router-link>
+        <button @click="dismissedReminder = true" class="text-gray-500 font-medium">
+          Later
+        </button>
+      </div>
     </div>
 
     <div class="space-y-3 mb-4">

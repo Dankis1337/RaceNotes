@@ -16,6 +16,7 @@ type Race struct {
 	Tires             *string        `json:"tires"`
 	TirePressureFront *float64       `json:"tire_pressure_front"`
 	TirePressureRear  *float64       `json:"tire_pressure_rear"`
+	OtherComponents   *string        `json:"other_components" gorm:"type:text"`
 	Temperature       *int           `json:"temperature"`
 	Conditions        *string        `json:"conditions"`
 	Wind              *string        `json:"wind"`

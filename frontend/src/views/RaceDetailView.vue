@@ -91,6 +91,11 @@ function formatDate(d) {
           </div>
         </div>
 
+        <div v-if="race().other_components">
+          <p class="text-gray-400 text-xs">Other Components</p>
+          <p class="text-sm whitespace-pre-line">{{ race().other_components }}</p>
+        </div>
+
         <div v-if="race().conditions || race().wind || race().road_conditions || race().temperature !== null" class="space-y-2">
           <p class="text-gray-400 text-xs">Weather & Conditions</p>
           <div class="flex flex-wrap gap-2">

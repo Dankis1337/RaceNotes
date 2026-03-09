@@ -2,6 +2,7 @@
 import { ref, onMounted } from 'vue'
 import { useAuthStore } from '../stores/auth'
 import { calculatePressure } from '../api/calculator'
+import { calculateTirePressureOffline } from '../utils/tirePressureCalc'
 
 const authStore = useAuthStore()
 
@@ -33,7 +34,12 @@ async function handleCalculate() {
     const { data } = await calculatePressure(form.value)
     result.value = data
   } catch (e) {
-    error.value = e.response?.data?.error || 'Calculation failed'
+    // Fallback to offline calculation
+    try {
+      result.value = calculateTirePressureOffline(form.value)
+    } catch {
+      error.value = 'Calculation failed'
+    }
   } finally {
     loading.value = false
   }

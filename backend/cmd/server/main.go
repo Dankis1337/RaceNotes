@@ -45,6 +45,10 @@ func main() {
 	raceHandler := handlers.NewRaceHandler(raceService)
 	calcHandler := handlers.NewCalculatorHandler()
 
+	// Start email reminder cron
+	notificationService := services.NewNotificationService(db)
+	notificationService.StartReminderCron()
+
 	r := gin.Default()
 
 	r.Use(func(c *gin.Context) {

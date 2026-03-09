@@ -5,6 +5,7 @@ import { useRacesStore } from '../stores/races'
 import { useSetupsStore } from '../stores/setups'
 import { useAuthStore } from '../stores/auth'
 import { calculatePressure } from '../api/calculator'
+import { calculateTirePressureOffline } from '../utils/tirePressureCalc'
 import StarRating from '../components/StarRating.vue'
 import { CalculatorIcon } from '@heroicons/vue/24/outline'
 import { useToast } from '../composables/useToast'
@@ -36,6 +37,7 @@ const form = ref({
   tires: '',
   tire_pressure_front: null,
   tire_pressure_rear: null,
+  other_components: '',
   temperature: null,
   conditions: null,
   wind: null,
@@ -92,6 +94,7 @@ onMounted(async () => {
         tires: race.tires || '',
         tire_pressure_front: race.tire_pressure_front,
         tire_pressure_rear: race.tire_pressure_rear,
+        other_components: race.other_components || '',
         temperature: race.temperature,
         conditions: race.conditions || null,
         wind: race.wind || null,
@@ -141,7 +144,12 @@ async function runCalculator() {
     const { data } = await calculatePressure(calcForm.value)
     calcResult.value = data
   } catch (e) {
-    error.value = 'Calculator error'
+    // Fallback to offline calculation
+    try {
+      calcResult.value = calculateTirePressureOffline(calcForm.value)
+    } catch {
+      error.value = 'Calculator error'
+    }
   } finally {
     calcLoading.value = false
   }
@@ -180,6 +188,7 @@ async function handleSubmit() {
 
     // Clean empty strings to null for optional fields
     if (!payload.photo) payload.photo = null
+    if (!payload.other_components) payload.other_components = null
     if (!payload.nutrition_plan) payload.nutrition_plan = null
     if (!payload.result) payload.result = null
     if (!payload.feelings) payload.feelings = null
@@ -294,6 +303,12 @@ async function handleSubmit() {
             <input v-model="form.tire_pressure_rear" type="number" step="0.01" min="0" class="w-full border border-gray-300 rounded-lg px-3 py-2.5 focus:ring-2 focus:ring-primary focus:border-transparent outline-none" placeholder="6.0" />
           </div>
         </div>
+      </div>
+
+      <!-- Other Components -->
+      <div class="bg-white rounded-xl shadow-md p-5 space-y-4">
+        <h2 class="font-semibold text-sm text-gray-400 uppercase tracking-wide">Other Components</h2>
+        <textarea v-model="form.other_components" rows="3" class="w-full border border-gray-300 rounded-lg px-3 py-2.5 focus:ring-2 focus:ring-primary focus:border-transparent outline-none resize-none" placeholder="e.g. Saddle height, handlebar position, gearing..."></textarea>
       </div>
 
       <!-- Weather -->
