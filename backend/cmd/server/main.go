@@ -39,6 +39,10 @@ func main() {
 
 	authService := services.NewAuthService(db)
 	authHandler := handlers.NewAuthHandler(authService)
+	setupService := services.NewSetupService(db)
+	setupHandler := handlers.NewSetupHandler(setupService)
+	raceService := services.NewRaceService(db)
+	raceHandler := handlers.NewRaceHandler(raceService)
 
 	r := gin.Default()
 
@@ -66,6 +70,26 @@ func main() {
 	{
 		user.GET("/profile", authHandler.GetProfile)
 		user.PUT("/profile", authHandler.UpdateProfile)
+	}
+
+	setups := api.Group("/setups")
+	setups.Use(middleware.AuthRequired())
+	{
+		setups.POST("", setupHandler.Create)
+		setups.GET("", setupHandler.List)
+		setups.GET("/:id", setupHandler.GetByID)
+		setups.PUT("/:id", setupHandler.Update)
+		setups.DELETE("/:id", setupHandler.Delete)
+	}
+
+	races := api.Group("/races")
+	races.Use(middleware.AuthRequired())
+	{
+		races.POST("", raceHandler.Create)
+		races.GET("", raceHandler.List)
+		races.GET("/:id", raceHandler.GetByID)
+		races.PUT("/:id", raceHandler.Update)
+		races.DELETE("/:id", raceHandler.Delete)
 	}
 
 	log.Printf("Server starting on port %s", port)
