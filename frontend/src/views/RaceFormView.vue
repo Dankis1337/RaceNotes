@@ -7,6 +7,7 @@ import { useAuthStore } from '../stores/auth'
 import { calculatePressure } from '../api/calculator'
 import StarRating from '../components/StarRating.vue'
 import { CalculatorIcon } from '@heroicons/vue/24/outline'
+import { useToast } from '../composables/useToast'
 
 const route = useRoute()
 const router = useRouter()
@@ -14,6 +15,7 @@ const racesStore = useRacesStore()
 const setupsStore = useSetupsStore()
 const authStore = useAuthStore()
 
+const { toast } = useToast()
 const isEdit = computed(() => !!route.params.id)
 const loading = ref(false)
 const error = ref('')
@@ -184,8 +186,10 @@ async function handleSubmit() {
 
     if (isEdit.value) {
       await racesStore.updateRace(route.params.id, payload)
+      toast('Race updated')
     } else {
       await racesStore.createRace(payload)
+      toast('Race created')
     }
     router.push('/')
   } catch (e) {

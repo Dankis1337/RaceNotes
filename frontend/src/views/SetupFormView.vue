@@ -2,11 +2,13 @@
 import { ref, computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useSetupsStore } from '../stores/setups'
+import { useToast } from '../composables/useToast'
 
 const route = useRoute()
 const router = useRouter()
 const setupsStore = useSetupsStore()
 
+const { toast } = useToast()
 const isEdit = computed(() => !!route.params.id)
 const loading = ref(false)
 const error = ref('')
@@ -43,8 +45,10 @@ async function handleSubmit() {
 
     if (isEdit.value) {
       await setupsStore.updateSetup(route.params.id, payload)
+      toast('Setup updated')
     } else {
       await setupsStore.createSetup(payload)
+      toast('Setup created')
     }
     router.push('/setups')
   } catch (e) {

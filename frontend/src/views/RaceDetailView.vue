@@ -5,10 +5,12 @@ import { useRacesStore } from '../stores/races'
 import StarRating from '../components/StarRating.vue'
 import WeatherBadge from '../components/WeatherBadge.vue'
 import { PencilIcon, TrashIcon } from '@heroicons/vue/24/outline'
+import { useToast } from '../composables/useToast'
 
 const route = useRoute()
 const router = useRouter()
 const racesStore = useRacesStore()
+const { toast } = useToast()
 const showConfirm = ref(false)
 
 onMounted(() => {
@@ -19,6 +21,7 @@ const race = () => racesStore.currentRace
 
 async function handleDelete() {
   await racesStore.removeRace(route.params.id)
+  toast('Race deleted')
   router.push('/')
 }
 

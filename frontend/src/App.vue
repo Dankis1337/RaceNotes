@@ -1,6 +1,8 @@
 <script setup>
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
+import Toast from './components/Toast.vue'
+import { useToast } from './composables/useToast'
 import {
   FlagIcon,
   WrenchScrewdriverIcon,
@@ -15,6 +17,7 @@ import {
 } from '@heroicons/vue/24/solid'
 
 const route = useRoute()
+const { message, type, show, close } = useToast()
 
 const showNav = computed(() => {
   return !['Login', 'Register'].includes(route.name)
@@ -34,6 +37,7 @@ function isActive(item) {
 </script>
 
 <template>
+  <Toast :message="message" :type="type" :show="show" @close="close" />
   <router-view />
 
   <nav

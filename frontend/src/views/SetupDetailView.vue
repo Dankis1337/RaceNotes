@@ -3,10 +3,12 @@ import { onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useSetupsStore } from '../stores/setups'
 import { PencilIcon, TrashIcon } from '@heroicons/vue/24/outline'
+import { useToast } from '../composables/useToast'
 
 const route = useRoute()
 const router = useRouter()
 const setupsStore = useSetupsStore()
+const { toast } = useToast()
 const showConfirm = ref(false)
 
 onMounted(() => {
@@ -17,6 +19,7 @@ const setup = () => setupsStore.currentSetup
 
 async function handleDelete() {
   await setupsStore.removeSetup(route.params.id)
+  toast('Setup deleted')
   router.push('/setups')
 }
 </script>
