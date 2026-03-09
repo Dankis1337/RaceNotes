@@ -70,9 +70,9 @@ function isActive(item) {
     </aside>
 
     <!-- Main content -->
-    <div class="flex-1 lg:ml-56">
+    <main class="flex-1 lg:ml-56">
       <router-view />
-    </div>
+    </main>
   </div>
 
   <!-- Mobile bottom nav -->
