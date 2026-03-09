@@ -1,0 +1,48 @@
+version: "3.8"
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${DB_USER:-racenotes}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-racenotes}
+      POSTGRES_DB: ${DB_NAME:-racenotes}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-racenotes}"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  backend:
+    build: ./backend
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DB_HOST: postgres
+      DB_PORT: "5432"
+      DB_USER: ${DB_USER:-racenotes}
+      DB_PASSWORD: ${DB_PASSWORD:-racenotes}
+      DB_NAME: ${DB_NAME:-racenotes}
+      JWT_SECRET: ${JWT_SECRET:-change-me-in-production}
+      PORT: "8080"
+    expose:
+      - "8080"
+
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        VITE_API_URL: ""
+    restart: unless-stopped
+    depends_on:
+      - backend
+    ports:
+      - "${APP_PORT:-80}:80"
+
+volumes:
+  pgdata:
