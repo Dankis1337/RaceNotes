@@ -46,11 +46,21 @@ func (h *AuthHandler) Register(c *gin.Context) {
 	}
 
 	if err := h.Service.Register(user, req.Password); err != nil {
-		c.JSON(http.StatusConflict, gin.H{"error": "username or email already exists"})
+		if err.Error() == "username already exists" || err.Error() == "email already exists" {
+			c.JSON(http.StatusConflict, gin.H{"error": err.Error()})
+		} else {
+			c.JSON(http.StatusConflict, gin.H{"error": "username or email already exists"})
+		}
 		return
 	}
 
-	c.JSON(http.StatusCreated, gin.H{"message": "user registered successfully"})
+	token, err := h.Service.Login(req.Username, req.Password)
+	if err != nil {
+		c.JSON(http.StatusCreated, gin.H{"message": "user registered successfully"})
+		return
+	}
+
+	c.JSON(http.StatusCreated, gin.H{"token": token})
 }
 
 func (h *AuthHandler) Login(c *gin.Context) {

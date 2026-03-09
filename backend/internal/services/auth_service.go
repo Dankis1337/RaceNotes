@@ -20,6 +20,16 @@ func NewAuthService(db *gorm.DB) *AuthService {
 }
 
 func (s *AuthService) Register(user *models.User, password string) error {
+	var count int64
+	s.DB.Model(&models.User{}).Where("username = ?", user.Username).Count(&count)
+	if count > 0 {
+		return errors.New("username already exists")
+	}
+	s.DB.Model(&models.User{}).Where("email = ?", user.Email).Count(&count)
+	if count > 0 {
+		return errors.New("email already exists")
+	}
+
 	hashed, err := bcrypt.GenerateFromPassword([]byte(password), 14)
 	if err != nil {
 		return err

@@ -29,8 +29,10 @@ onMounted(() => {
         v-for="setup in setupsStore.setups"
         :key="setup.id"
         :to="`/setups/${setup.id}`"
-        class="block bg-white rounded-xl shadow-md p-4 hover:shadow-lg transition-shadow"
+        class="block bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow"
       >
+        <img v-if="setup.photo" :src="setup.photo" class="w-full h-32 object-cover" />
+        <div class="p-4">
         <h3 class="font-semibold text-base mb-1">{{ setup.name }}</h3>
         <div class="flex items-center gap-2 text-sm text-gray-500">
           <span>{{ setup.bike_name }}</span>
@@ -40,6 +42,7 @@ onMounted(() => {
         <p v-if="setup.components_description" class="text-xs text-gray-400 mt-1 line-clamp-1">
           {{ setup.components_description }}
         </p>
+        </div>
       </router-link>
     </div>
 

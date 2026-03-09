@@ -15,6 +15,7 @@ const error = ref('')
 
 const form = ref({
   name: '',
+  photo: '',
   bike_name: '',
   tires: '',
   components_description: '',
@@ -27,6 +28,7 @@ onMounted(async () => {
     if (s) {
       form.value = {
         name: s.name,
+        photo: s.photo || '',
         bike_name: s.bike_name,
         tires: s.tires,
         components_description: s.components_description || '',
@@ -41,6 +43,7 @@ async function handleSubmit() {
 
   try {
     const payload = { ...form.value }
+    if (!payload.photo) payload.photo = null
     if (!payload.components_description) payload.components_description = null
 
     if (isEdit.value) {
@@ -74,6 +77,12 @@ async function handleSubmit() {
         <div>
           <label class="block text-sm font-medium text-gray-700 mb-1">Setup Name *</label>
           <input v-model="form.name" type="text" required class="w-full border border-gray-300 rounded-lg px-3 py-2.5 focus:ring-2 focus:ring-primary focus:border-transparent outline-none" placeholder="e.g. Road Race Setup" />
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Photo URL</label>
+          <input v-model="form.photo" type="url" class="w-full border border-gray-300 rounded-lg px-3 py-2.5 focus:ring-2 focus:ring-primary focus:border-transparent outline-none" placeholder="https://example.com/photo.jpg" />
+          <img v-if="form.photo" :src="form.photo" class="mt-2 rounded-lg w-full h-40 object-cover" @error="form.photo = ''" />
         </div>
 
         <div>

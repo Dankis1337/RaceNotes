@@ -2,15 +2,24 @@
 import { ref, onMounted, computed } from 'vue'
 import { useAuthStore } from '../stores/auth'
 import { useRacesStore } from '../stores/races'
+import { useSetupsStore } from '../stores/setups'
 import { PlusIcon } from '@heroicons/vue/24/solid'
 import RaceCard from '../components/RaceCard.vue'
 import FilterChips from '../components/FilterChips.vue'
 
 const auth = useAuthStore()
 const racesStore = useRacesStore()
+const setupsStore = useSetupsStore()
 
 const statusFilter = ref('')
 const typeFilter = ref('')
+const setupFilter = ref('')
+
+const setupOptions = computed(() => {
+  const opts = [{ label: 'All', value: '' }]
+  setupsStore.setups.forEach(s => opts.push({ label: s.name, value: String(s.id) }))
+  return opts
+})
 
 const statusOptions = [
   { label: 'All', value: '' },
@@ -38,11 +47,13 @@ async function loadRaces() {
   const params = {}
   if (statusFilter.value) params.is_completed = statusFilter.value
   if (typeFilter.value) params.type = typeFilter.value
+  if (setupFilter.value) params.setup_id = setupFilter.value
   await racesStore.fetchRaces(params)
 }
 
 onMounted(async () => {
   await auth.fetchProfile()
+  await setupsStore.fetchSetups()
   await loadRaces()
 })
 
@@ -53,6 +64,11 @@ function onStatusChange(val) {
 
 function onTypeChange(val) {
   typeFilter.value = val
+  loadRaces()
+}
+
+function onSetupChange(val) {
+  setupFilter.value = val
   loadRaces()
 }
 </script>
@@ -81,6 +97,7 @@ function onTypeChange(val) {
     <div class="space-y-3 mb-4">
       <FilterChips label="Status" :options="statusOptions" :modelValue="statusFilter" @update:modelValue="onStatusChange" />
       <FilterChips label="Type" :options="typeOptions" :modelValue="typeFilter" @update:modelValue="onTypeChange" />
+      <FilterChips v-if="setupOptions.length > 1" label="Setup" :options="setupOptions" :modelValue="setupFilter" @update:modelValue="onSetupChange" />
     </div>
 
     <div v-if="racesStore.loading" class="flex justify-center py-12">

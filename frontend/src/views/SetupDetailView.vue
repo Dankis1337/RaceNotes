@@ -43,10 +43,13 @@ async function handleDelete() {
         </div>
       </div>
 
-      <div class="bg-white rounded-xl shadow-md p-5 space-y-4">
-        <h1 class="text-xl font-bold">{{ setup().name }}</h1>
+      <div class="bg-white rounded-xl shadow-md overflow-hidden space-y-4">
+        <img v-if="setup().photo" :src="setup().photo" class="w-full h-48 object-cover" />
+        <div class="px-5 pt-4" :class="{ 'pt-5': !setup().photo }">
+          <h1 class="text-xl font-bold">{{ setup().name }}</h1>
+        </div>
 
-        <div class="grid grid-cols-2 gap-3 text-sm">
+        <div class="grid grid-cols-2 gap-3 text-sm px-5">
           <div>
             <p class="text-gray-400 text-xs">Bike</p>
             <p class="font-medium">{{ setup().bike_name }}</p>
@@ -57,7 +60,7 @@ async function handleDelete() {
           </div>
         </div>
 
-        <div v-if="setup().components_description">
+        <div v-if="setup().components_description" class="px-5 pb-5">
           <p class="text-gray-400 text-xs">Components</p>
           <p class="text-sm whitespace-pre-line">{{ setup().components_description }}</p>
         </div>

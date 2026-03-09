@@ -30,6 +30,7 @@ const form = ref({
   name: '',
   date: '',
   type: 'Road',
+  photo: '',
   setup_id: null,
   bike_name: '',
   tires: '',
@@ -85,6 +86,7 @@ onMounted(async () => {
         name: race.name,
         date: race.date ? race.date.substring(0, 10) : '',
         type: race.type,
+        photo: race.photo || '',
         setup_id: race.setup_id || null,
         bike_name: race.bike_name || '',
         tires: race.tires || '',
@@ -177,6 +179,7 @@ async function handleSubmit() {
     }
 
     // Clean empty strings to null for optional fields
+    if (!payload.photo) payload.photo = null
     if (!payload.nutrition_plan) payload.nutrition_plan = null
     if (!payload.result) payload.result = null
     if (!payload.feelings) payload.feelings = null
@@ -231,6 +234,11 @@ async function handleSubmit() {
               <option v-for="t in raceTypes" :key="t" :value="t">{{ t }}</option>
             </select>
           </div>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Photo URL</label>
+          <input v-model="form.photo" type="url" class="w-full border border-gray-300 rounded-lg px-3 py-2.5 focus:ring-2 focus:ring-primary focus:border-transparent outline-none" placeholder="https://example.com/photo.jpg" />
         </div>
       </div>
 

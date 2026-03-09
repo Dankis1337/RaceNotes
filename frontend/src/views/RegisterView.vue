@@ -25,7 +25,9 @@ async function handleRegister() {
     if (payload.height) payload.height = Number(payload.height)
     if (payload.weight) payload.weight = Number(payload.weight)
     await auth.registerUser(payload)
-    await auth.loginUser({ username: form.value.username, password: form.value.password })
+    if (!auth.isAuthenticated) {
+      await auth.loginUser({ username: form.value.username, password: form.value.password })
+    }
     router.push('/')
   } catch (e) {
     error.value = e.response?.data?.error || 'Registration failed'

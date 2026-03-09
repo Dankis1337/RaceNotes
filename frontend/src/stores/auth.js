@@ -15,7 +15,11 @@ export const useAuthStore = defineStore('auth', () => {
   }
 
   async function registerUser(userData) {
-    await authApi.register(userData)
+    const { data } = await authApi.register(userData)
+    if (data.token) {
+      token.value = data.token
+      localStorage.setItem('token', data.token)
+    }
   }
 
   async function fetchProfile() {
