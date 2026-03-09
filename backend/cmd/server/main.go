@@ -17,8 +17,8 @@ import (
 func main() {
 	dbHost := getEnv("DB_HOST", "localhost")
 	dbPort := getEnv("DB_PORT", "5432")
-	dbUser := getEnv("DB_USER", "postgres")
-	dbPassword := getEnv("DB_PASSWORD", "postgres")
+	dbUser := getEnv("DB_USER", "racenotes")
+	dbPassword := getEnv("DB_PASSWORD", "racenotes")
 	dbName := getEnv("DB_NAME", "racenotes")
 	jwtSecret := getEnv("JWT_SECRET", "racenotes-secret-key")
 	port := getEnv("PORT", "8080")
