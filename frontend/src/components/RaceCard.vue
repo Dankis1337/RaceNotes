@@ -12,7 +12,9 @@ const formattedDate = computed(() => {
 </script>
 
 <template>
-  <router-link :to="`/races/${race.id}`" class="block bg-white rounded-xl shadow-md p-4 hover:shadow-lg transition-shadow">
+  <router-link :to="`/races/${race.id}`" class="block bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow">
+    <img v-if="race.photo" :src="race.photo" class="w-full h-32 object-cover" />
+    <div class="p-4">
     <div class="flex items-start justify-between mb-2">
       <div>
         <h3 class="font-semibold text-base">{{ race.name }}</h3>
@@ -35,6 +37,7 @@ const formattedDate = computed(() => {
     <div v-if="race.is_completed" class="mt-2 flex items-center justify-between">
       <span v-if="race.result" class="text-sm font-medium">{{ race.result }}</span>
       <StarRating v-if="race.rating" :rating="race.rating" :readonly="true" size="sm" />
+    </div>
     </div>
   </router-link>
 </template>
