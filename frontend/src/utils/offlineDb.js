@@ -1,7 +1,10 @@
 const DB_NAME = 'racenotes-offline'
 const DB_VERSION = 1
 
+let dbInstance = null
+
 function openDb() {
+  if (dbInstance) return Promise.resolve(dbInstance)
   return new Promise((resolve, reject) => {
     const request = indexedDB.open(DB_NAME, DB_VERSION)
     request.onupgradeneeded = (e) => {
@@ -17,7 +20,11 @@ function openDb() {
         store.createIndex('type', 'type')
       }
     }
-    request.onsuccess = () => resolve(request.result)
+    request.onsuccess = () => {
+      dbInstance = request.result
+      dbInstance.onclose = () => { dbInstance = null }
+      resolve(dbInstance)
+    }
     request.onerror = () => reject(request.error)
   })
 }
@@ -46,7 +53,6 @@ async function putAll(storeName, items) {
 }
 
 async function addPendingSync(action) {
-  // action: { type: 'create_race'|'update_race'|'delete_race'|'create_setup'|..., payload: {...} }
   const db = await openDb()
   const tx = db.transaction('pendingSync', 'readwrite')
   tx.objectStore('pendingSync').add({ ...action, createdAt: Date.now() })
@@ -81,15 +87,10 @@ async function removePendingItem(localId) {
 }
 
 export const offlineDb = {
-  // Cache data from server
   cacheRaces: (races) => putAll('races', races),
   cacheSetups: (setups) => putAll('setups', setups),
-
-  // Get cached data
   getCachedRaces: () => getAll('races'),
   getCachedSetups: () => getAll('setups'),
-
-  // Pending sync queue
   addPendingSync,
   getPendingSync,
   clearPendingSync,

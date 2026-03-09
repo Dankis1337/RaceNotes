@@ -7,6 +7,16 @@ const syncing = ref(false)
 const isOnline = ref(navigator.onLine)
 
 let syncInterval = null
+let listenerCount = 0
+
+function handleOnline() {
+  isOnline.value = true
+  syncPendingItems()
+}
+
+function handleOffline() {
+  isOnline.value = false
+}
 
 async function refreshPendingCount() {
   try {
@@ -47,7 +57,6 @@ async function syncPendingItems() {
         }
         await offlineDb.removePendingItem(item.localId)
       } catch (e) {
-        // If server rejects (4xx), remove from queue; if network error, stop
         if (e.response && e.response.status >= 400 && e.response.status < 500) {
           await offlineDb.removePendingItem(item.localId)
         } else {
@@ -62,32 +71,30 @@ async function syncPendingItems() {
 }
 
 export function useOfflineSync() {
-  function handleOnline() {
-    isOnline.value = true
-    syncPendingItems()
-  }
-
-  function handleOffline() {
-    isOnline.value = false
-  }
-
   onMounted(() => {
-    window.addEventListener('online', handleOnline)
-    window.addEventListener('offline', handleOffline)
+    listenerCount++
+    if (listenerCount === 1) {
+      window.addEventListener('online', handleOnline)
+      window.addEventListener('offline', handleOffline)
+      syncInterval = setInterval(() => {
+        if (navigator.onLine && pendingCount.value > 0) {
+          syncPendingItems()
+        }
+      }, 30000)
+    }
     refreshPendingCount()
-
-    // Auto-sync every 30s when online
-    syncInterval = setInterval(() => {
-      if (navigator.onLine && pendingCount.value > 0) {
-        syncPendingItems()
-      }
-    }, 30000)
   })
 
   onUnmounted(() => {
-    window.removeEventListener('online', handleOnline)
-    window.removeEventListener('offline', handleOffline)
-    if (syncInterval) clearInterval(syncInterval)
+    listenerCount--
+    if (listenerCount === 0) {
+      window.removeEventListener('online', handleOnline)
+      window.removeEventListener('offline', handleOffline)
+      if (syncInterval) {
+        clearInterval(syncInterval)
+        syncInterval = null
+      }
+    }
   })
 
   return { pendingCount, syncing, isOnline, syncPendingItems, refreshPendingCount }
