@@ -1,0 +1,20 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #83C082;
+  --color-primary-dark: #6BA86A;
+  --color-accent: #FAFFBA;
+  --color-text: #2D2D2D;
+}
+
+body {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  color: var(--color-text);
+  background-color: #ffffff;
+  margin: 0;
+}
+
+#app {
+  min-height: 100vh;
+  padding-bottom: 5rem;
+}
