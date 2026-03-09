@@ -2,7 +2,9 @@
 import { onMounted } from 'vue'
 import { useSetupsStore } from '../stores/setups'
 import { PlusIcon, WrenchScrewdriverIcon } from '@heroicons/vue/24/solid'
+import { useI18n } from '../utils/i18n'
 
+const { t } = useI18n()
 const setupsStore = useSetupsStore()
 
 onMounted(() => {
@@ -11,8 +13,8 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="px-4 pt-6 pb-20 max-w-lg mx-auto">
-    <h1 class="text-2xl font-bold mb-4">My Setups</h1>
+  <div class="px-4 pt-6 pb-20 max-w-lg mx-auto lg:max-w-4xl">
+    <h1 class="text-2xl font-bold mb-4">{{ t('my_setups') }}</h1>
 
     <div v-if="setupsStore.loading" class="flex justify-center py-12">
       <div class="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
@@ -20,11 +22,11 @@ onMounted(() => {
 
     <div v-else-if="setupsStore.setups.length === 0" class="text-center py-12">
       <WrenchScrewdriverIcon class="w-12 h-12 text-gray-300 mx-auto mb-3" />
-      <p class="text-gray-400 text-lg mb-1">No setups yet</p>
-      <p class="text-gray-400 text-sm">Create your first bike setup</p>
+      <p class="text-gray-400 text-lg mb-1">{{ t('no_setups_yet') }}</p>
+      <p class="text-gray-400 text-sm">{{ t('create_first_setup') }}</p>
     </div>
 
-    <div v-else class="space-y-3">
+    <div v-else class="space-y-3 lg:grid lg:grid-cols-2 lg:gap-4 lg:space-y-0">
       <router-link
         v-for="setup in setupsStore.setups"
         :key="setup.id"
@@ -48,7 +50,7 @@ onMounted(() => {
 
     <router-link
       to="/setups/new"
-      class="fixed right-4 w-14 h-14 bg-primary text-white rounded-full shadow-lg flex items-center justify-center hover:bg-primary-dark transition-colors z-30"
+      class="fixed right-4 w-14 h-14 bg-primary text-white rounded-full shadow-lg flex items-center justify-center hover:bg-primary-dark transition-colors z-30 lg:right-8"
       style="bottom: calc(5rem + env(safe-area-inset-bottom, 0px))"
     >
       <PlusIcon class="w-7 h-7" />

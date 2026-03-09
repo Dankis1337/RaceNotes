@@ -20,6 +20,13 @@ body {
   padding-bottom: calc(5rem + env(safe-area-inset-bottom, 0px));
 }
 
+/* Desktop: no bottom nav padding needed */
+@media (min-width: 1024px) {
+  #app {
+    padding-bottom: 0;
+  }
+}
+
 html {
   -webkit-tap-highlight-color: transparent;
   -webkit-text-size-adjust: 100%;

@@ -4,7 +4,9 @@ import { useRoute, useRouter } from 'vue-router'
 import { useSetupsStore } from '../stores/setups'
 import { useToast } from '../composables/useToast'
 import PhotoUpload from '../components/PhotoUpload.vue'
+import { useI18n } from '../utils/i18n'
 
+const { t } = useI18n()
 const route = useRoute()
 const router = useRouter()
 const setupsStore = useSetupsStore()
@@ -49,14 +51,14 @@ async function handleSubmit() {
 
     if (isEdit.value) {
       await setupsStore.updateSetup(route.params.id, payload)
-      toast('Setup updated')
+      toast(t('setup_updated'))
     } else {
       await setupsStore.createSetup(payload)
-      toast('Setup created')
+      toast(t('setup_created'))
     }
     router.push('/setups')
   } catch (e) {
-    error.value = e.response?.data?.error || 'Failed to save setup'
+    error.value = e.response?.data?.error || t('failed_save_setup')
   } finally {
     loading.value = false
   }
@@ -64,10 +66,10 @@ async function handleSubmit() {
 </script>
 
 <template>
-  <div class="px-4 pt-6 pb-24 max-w-lg mx-auto">
+  <div class="px-4 pt-6 pb-24 max-w-lg mx-auto lg:max-w-2xl">
     <div class="flex items-center justify-between mb-4">
-      <button @click="router.back()" class="text-gray-400 text-sm">&larr; Back</button>
-      <h1 class="text-lg font-bold">{{ isEdit ? 'Edit Setup' : 'New Setup' }}</h1>
+      <button @click="router.back()" class="text-gray-400 text-sm">&larr; {{ t('back') }}</button>
+      <h1 class="text-lg font-bold">{{ isEdit ? t('edit_setup') : t('new_setup') }}</h1>
       <div class="w-10"></div>
     </div>
 
@@ -76,28 +78,28 @@ async function handleSubmit() {
 
       <div class="bg-white rounded-xl shadow-md p-5 space-y-4">
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Setup Name *</label>
-          <input v-model="form.name" type="text" required class="w-full border border-gray-300 rounded-lg px-3 py-2.5 focus:ring-2 focus:ring-primary focus:border-transparent outline-none" placeholder="e.g. Road Race Setup" />
+          <label class="block text-sm font-medium text-gray-700 mb-1">{{ t('setup_name') }} *</label>
+          <input v-model="form.name" type="text" required class="w-full border border-gray-300 rounded-lg px-3 py-2.5 focus:ring-2 focus:ring-primary focus:border-transparent outline-none" :placeholder="t('setup_name_placeholder')" />
         </div>
 
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Photo</label>
+          <label class="block text-sm font-medium text-gray-700 mb-1">{{ t('photo') }}</label>
           <PhotoUpload v-model="form.photo" />
         </div>
 
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Bike Name *</label>
-          <input v-model="form.bike_name" type="text" required class="w-full border border-gray-300 rounded-lg px-3 py-2.5 focus:ring-2 focus:ring-primary focus:border-transparent outline-none" placeholder="e.g. Canyon Aeroad CF SLX" />
+          <label class="block text-sm font-medium text-gray-700 mb-1">{{ t('bike_name') }} *</label>
+          <input v-model="form.bike_name" type="text" required class="w-full border border-gray-300 rounded-lg px-3 py-2.5 focus:ring-2 focus:ring-primary focus:border-transparent outline-none" :placeholder="t('bike_name_setup_placeholder')" />
         </div>
 
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Tires *</label>
-          <input v-model="form.tires" type="text" required class="w-full border border-gray-300 rounded-lg px-3 py-2.5 focus:ring-2 focus:ring-primary focus:border-transparent outline-none" placeholder="e.g. Continental GP5000 28mm" />
+          <label class="block text-sm font-medium text-gray-700 mb-1">{{ t('tires') }} *</label>
+          <input v-model="form.tires" type="text" required class="w-full border border-gray-300 rounded-lg px-3 py-2.5 focus:ring-2 focus:ring-primary focus:border-transparent outline-none" :placeholder="t('tires_placeholder')" />
         </div>
 
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Components Description</label>
-          <textarea v-model="form.components_description" rows="4" class="w-full border border-gray-300 rounded-lg px-3 py-2.5 focus:ring-2 focus:ring-primary focus:border-transparent outline-none resize-none" placeholder="Shimano Ultegra Di2, Zipp 303 wheels..."></textarea>
+          <label class="block text-sm font-medium text-gray-700 mb-1">{{ t('components_description') }}</label>
+          <textarea v-model="form.components_description" rows="4" class="w-full border border-gray-300 rounded-lg px-3 py-2.5 focus:ring-2 focus:ring-primary focus:border-transparent outline-none resize-none" :placeholder="t('components_placeholder')"></textarea>
         </div>
       </div>
 
@@ -106,7 +108,7 @@ async function handleSubmit() {
         :disabled="loading"
         class="w-full bg-primary text-white font-medium py-3 rounded-xl hover:bg-primary-dark transition-colors disabled:opacity-50 shadow-md"
       >
-        {{ loading ? 'Saving...' : (isEdit ? 'Save Changes' : 'Create Setup') }}
+        {{ loading ? t('saving') : (isEdit ? t('save_changes') : t('create_setup')) }}
       </button>
     </form>
   </div>

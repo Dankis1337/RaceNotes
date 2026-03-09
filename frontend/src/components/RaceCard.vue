@@ -2,7 +2,9 @@
 import { computed } from 'vue'
 import StarRating from './StarRating.vue'
 import WeatherBadge from './WeatherBadge.vue'
+import { useI18n } from '../utils/i18n'
 
+const { t } = useI18n()
 const props = defineProps({ race: Object })
 
 const formattedDate = computed(() => {
@@ -24,7 +26,7 @@ const formattedDate = computed(() => {
         class="text-xs font-medium px-2 py-0.5 rounded-full"
         :class="race.is_completed ? 'bg-primary/15 text-primary' : 'bg-amber-100 text-amber-700'"
       >
-        {{ race.is_completed ? 'Done' : 'Planned' }}
+        {{ race.is_completed ? t('done') : t('planned') }}
       </span>
     </div>
 

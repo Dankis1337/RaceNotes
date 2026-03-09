@@ -4,7 +4,9 @@ import { useRoute, useRouter } from 'vue-router'
 import { useSetupsStore } from '../stores/setups'
 import { PencilIcon, TrashIcon } from '@heroicons/vue/24/outline'
 import { useToast } from '../composables/useToast'
+import { useI18n } from '../utils/i18n'
 
+const { t } = useI18n()
 const route = useRoute()
 const router = useRouter()
 const setupsStore = useSetupsStore()
@@ -19,20 +21,20 @@ const setup = () => setupsStore.currentSetup
 
 async function handleDelete() {
   await setupsStore.removeSetup(route.params.id)
-  toast('Setup deleted')
+  toast(t('setup_deleted'))
   router.push('/setups')
 }
 </script>
 
 <template>
-  <div class="px-4 pt-6 pb-20 max-w-lg mx-auto">
+  <div class="px-4 pt-6 pb-20 max-w-lg mx-auto lg:max-w-2xl">
     <div v-if="setupsStore.loading" class="flex justify-center py-12">
       <div class="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
     </div>
 
     <template v-else-if="setup()">
       <div class="flex items-center justify-between mb-4">
-        <button @click="router.back()" class="text-gray-400 text-sm">&larr; Back</button>
+        <button @click="router.back()" class="text-gray-400 text-sm">&larr; {{ t('back') }}</button>
         <div class="flex gap-2">
           <router-link :to="`/setups/${setup().id}/edit`" class="p-2 text-gray-500 hover:text-primary">
             <PencilIcon class="w-5 h-5" />
@@ -51,17 +53,17 @@ async function handleDelete() {
 
         <div class="grid grid-cols-2 gap-3 text-sm px-5">
           <div>
-            <p class="text-gray-400 text-xs">Bike</p>
+            <p class="text-gray-400 text-xs">{{ t('bike') }}</p>
             <p class="font-medium">{{ setup().bike_name }}</p>
           </div>
           <div>
-            <p class="text-gray-400 text-xs">Tires</p>
+            <p class="text-gray-400 text-xs">{{ t('tires') }}</p>
             <p class="font-medium">{{ setup().tires }}</p>
           </div>
         </div>
 
         <div v-if="setup().components_description" class="px-5 pb-5">
-          <p class="text-gray-400 text-xs">Components</p>
+          <p class="text-gray-400 text-xs">{{ t('components') }}</p>
           <p class="text-sm whitespace-pre-line">{{ setup().components_description }}</p>
         </div>
       </div>
@@ -70,11 +72,11 @@ async function handleDelete() {
     <!-- Delete confirm modal -->
     <div v-if="showConfirm" class="fixed inset-0 bg-black/40 flex items-center justify-center z-50 px-4">
       <div class="bg-white rounded-xl p-5 w-full max-w-sm">
-        <h3 class="font-semibold text-lg mb-2">Delete Setup?</h3>
-        <p class="text-gray-500 text-sm mb-4">This action cannot be undone.</p>
+        <h3 class="font-semibold text-lg mb-2">{{ t('delete_setup_q') }}</h3>
+        <p class="text-gray-500 text-sm mb-4">{{ t('cannot_undo') }}</p>
         <div class="flex gap-3">
-          <button @click="showConfirm = false" class="flex-1 py-2 rounded-lg border border-gray-300 text-gray-600">Cancel</button>
-          <button @click="handleDelete" class="flex-1 py-2 rounded-lg bg-red-500 text-white">Delete</button>
+          <button @click="showConfirm = false" class="flex-1 py-2 rounded-lg border border-gray-300 text-gray-600">{{ t('cancel') }}</button>
+          <button @click="handleDelete" class="flex-1 py-2 rounded-lg bg-red-500 text-white">{{ t('delete_btn') }}</button>
         </div>
       </div>
     </div>

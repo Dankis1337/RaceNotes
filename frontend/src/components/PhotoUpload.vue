@@ -2,6 +2,9 @@
 import { ref } from 'vue'
 import { uploadFile } from '../api/upload'
 import { CameraIcon, XMarkIcon } from '@heroicons/vue/24/outline'
+import { useI18n } from '../utils/i18n'
+
+const { t } = useI18n()
 
 const props = defineProps({
   modelValue: { type: String, default: '' },
@@ -16,7 +19,7 @@ async function handleFileChange(e) {
   if (!file) return
 
   if (file.size > 10 * 1024 * 1024) {
-    error.value = 'File must be under 10 MB'
+    error.value = t('file_too_large')
     return
   }
 
@@ -26,7 +29,7 @@ async function handleFileChange(e) {
     const { data } = await uploadFile(file)
     emit('update:modelValue', data.url)
   } catch (err) {
-    error.value = err.response?.data?.error || 'Upload failed'
+    error.value = err.response?.data?.error || t('upload_failed')
   } finally {
     uploading.value = false
     e.target.value = ''
@@ -57,7 +60,7 @@ function removePhoto() {
       :class="{ 'opacity-50 pointer-events-none': uploading }"
     >
       <CameraIcon class="w-8 h-8 text-gray-400 mb-1" />
-      <span class="text-sm text-gray-500">{{ uploading ? 'Uploading...' : 'Tap to add photo' }}</span>
+      <span class="text-sm text-gray-500">{{ uploading ? t('uploading') : t('tap_add_photo') }}</span>
       <input
         type="file"
         accept="image/jpeg,image/png,image/gif,image/webp"
