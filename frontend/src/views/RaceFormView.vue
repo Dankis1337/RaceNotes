@@ -9,6 +9,7 @@ import { calculateTirePressureOffline } from '../utils/tirePressureCalc'
 import StarRating from '../components/StarRating.vue'
 import { CalculatorIcon } from '@heroicons/vue/24/outline'
 import { useToast } from '../composables/useToast'
+import PhotoUpload from '../components/PhotoUpload.vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -246,8 +247,8 @@ async function handleSubmit() {
         </div>
 
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Photo URL</label>
-          <input v-model="form.photo" type="url" class="w-full border border-gray-300 rounded-lg px-3 py-2.5 focus:ring-2 focus:ring-primary focus:border-transparent outline-none" placeholder="https://example.com/photo.jpg" />
+          <label class="block text-sm font-medium text-gray-700 mb-1">Photo</label>
+          <PhotoUpload v-model="form.photo" />
         </div>
       </div>
 

@@ -3,6 +3,7 @@ import { ref, computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useSetupsStore } from '../stores/setups'
 import { useToast } from '../composables/useToast'
+import PhotoUpload from '../components/PhotoUpload.vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -80,9 +81,8 @@ async function handleSubmit() {
         </div>
 
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Photo URL</label>
-          <input v-model="form.photo" type="url" class="w-full border border-gray-300 rounded-lg px-3 py-2.5 focus:ring-2 focus:ring-primary focus:border-transparent outline-none" placeholder="https://example.com/photo.jpg" />
-          <img v-if="form.photo" :src="form.photo" class="mt-2 rounded-lg w-full h-40 object-cover" @error="form.photo = ''" />
+          <label class="block text-sm font-medium text-gray-700 mb-1">Photo</label>
+          <PhotoUpload v-model="form.photo" />
         </div>
 
         <div>

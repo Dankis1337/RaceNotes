@@ -30,6 +30,8 @@ services:
       DB_NAME: ${DB_NAME:-racenotes}
       JWT_SECRET: ${JWT_SECRET:-change-me-in-production}
       PORT: "8080"
+    volumes:
+      - uploads:/app/uploads
     expose:
       - "8080"
 
@@ -46,3 +48,4 @@ services:
 
 volumes:
   pgdata:
+  uploads:

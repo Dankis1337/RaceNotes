@@ -44,6 +44,7 @@ func main() {
 	raceService := services.NewRaceService(db)
 	raceHandler := handlers.NewRaceHandler(raceService)
 	calcHandler := handlers.NewCalculatorHandler()
+	uploadHandler := handlers.NewUploadHandler()
 
 	// Start email reminder cron
 	notificationService := services.NewNotificationService(db)
@@ -102,6 +103,15 @@ func main() {
 	{
 		calculator.POST("/tire-pressure", calcHandler.Calculate)
 	}
+
+	upload := api.Group("/upload")
+	upload.Use(middleware.AuthRequired())
+	{
+		upload.POST("", uploadHandler.Upload)
+	}
+
+	// Serve uploaded files
+	api.Static("/uploads", "./uploads")
 
 	log.Printf("Server starting on port %s", port)
 	if err := r.Run(":" + port); err != nil {

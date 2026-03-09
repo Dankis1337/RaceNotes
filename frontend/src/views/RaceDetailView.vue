@@ -50,8 +50,9 @@ function formatDate(d) {
         </div>
       </div>
 
-      <div class="bg-white rounded-xl shadow-md p-5 space-y-4">
-        <div>
+      <div class="bg-white rounded-xl shadow-md overflow-hidden space-y-4">
+        <img v-if="race().photo" :src="race().photo" class="w-full h-48 object-cover" />
+        <div class="px-5" :class="{ 'pt-4': !race().photo }">
           <div class="flex items-center gap-2 mb-1">
             <h1 class="text-xl font-bold">{{ race().name }}</h1>
             <span
@@ -65,7 +66,7 @@ function formatDate(d) {
           <span class="inline-block mt-1 bg-gray-100 text-gray-600 text-xs px-2 py-0.5 rounded">{{ race().type }}</span>
         </div>
 
-        <div class="grid grid-cols-2 gap-3 text-sm">
+        <div class="grid grid-cols-2 gap-3 text-sm px-5">
           <div v-if="race().bike_name">
             <p class="text-gray-400 text-xs">Bike</p>
             <p class="font-medium">{{ race().bike_name }}</p>
@@ -80,7 +81,7 @@ function formatDate(d) {
           </div>
         </div>
 
-        <div v-if="race().tire_pressure_front || race().tire_pressure_rear" class="grid grid-cols-2 gap-3 text-sm">
+        <div v-if="race().tire_pressure_front || race().tire_pressure_rear" class="grid grid-cols-2 gap-3 text-sm px-5">
           <div v-if="race().tire_pressure_front">
             <p class="text-gray-400 text-xs">Front Pressure</p>
             <p class="font-medium">{{ race().tire_pressure_front }} bar</p>
@@ -91,12 +92,12 @@ function formatDate(d) {
           </div>
         </div>
 
-        <div v-if="race().other_components">
+        <div v-if="race().other_components" class="px-5">
           <p class="text-gray-400 text-xs">Other Components</p>
           <p class="text-sm whitespace-pre-line">{{ race().other_components }}</p>
         </div>
 
-        <div v-if="race().conditions || race().wind || race().road_conditions || race().temperature !== null" class="space-y-2">
+        <div v-if="race().conditions || race().wind || race().road_conditions || race().temperature !== null" class="space-y-2 px-5">
           <p class="text-gray-400 text-xs">Weather & Conditions</p>
           <div class="flex flex-wrap gap-2">
             <WeatherBadge v-if="race().conditions" :conditions="race().conditions" />
@@ -106,12 +107,12 @@ function formatDate(d) {
           </div>
         </div>
 
-        <div v-if="race().nutrition_plan">
+        <div v-if="race().nutrition_plan" class="px-5">
           <p class="text-gray-400 text-xs">Nutrition Plan</p>
           <p class="text-sm whitespace-pre-line">{{ race().nutrition_plan }}</p>
         </div>
 
-        <div v-if="race().is_completed" class="border-t pt-4 space-y-3">
+        <div v-if="race().is_completed" class="border-t pt-4 space-y-3 px-5 pb-5">
           <h2 class="font-semibold">Results</h2>
           <div v-if="race().result">
             <p class="text-gray-400 text-xs">Result</p>
@@ -127,7 +128,7 @@ function formatDate(d) {
           </div>
         </div>
 
-        <div v-if="!race().is_completed" class="border-t pt-4">
+        <div v-if="!race().is_completed" class="border-t pt-4 px-5 pb-5">
           <router-link
             :to="`/races/${race().id}/edit`"
             class="block w-full text-center bg-primary text-white font-medium py-2.5 rounded-lg hover:bg-primary-dark transition-colors"
