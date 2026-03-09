@@ -45,7 +45,8 @@ onMounted(() => {
 
     <router-link
       to="/setups/new"
-      class="fixed bottom-20 right-4 w-14 h-14 bg-primary text-white rounded-full shadow-lg flex items-center justify-center hover:bg-primary-dark transition-colors"
+      class="fixed right-4 w-14 h-14 bg-primary text-white rounded-full shadow-lg flex items-center justify-center hover:bg-primary-dark transition-colors z-30"
+      style="bottom: calc(5rem + env(safe-area-inset-bottom, 0px))"
     >
       <PlusIcon class="w-7 h-7" />
     </router-link>

@@ -42,7 +42,7 @@ function isActive(item) {
 
   <nav
     v-if="showNav"
-    class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 pb-[env(safe-area-inset-bottom)]"
+    class="fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-gray-200 pb-[env(safe-area-inset-bottom)]"
   >
     <div class="flex justify-around items-center h-16 max-w-lg mx-auto">
       <router-link

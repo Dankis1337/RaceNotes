@@ -16,5 +16,18 @@ body {
 
 #app {
   min-height: 100vh;
-  padding-bottom: 5rem;
+  min-height: 100dvh;
+  padding-bottom: calc(5rem + env(safe-area-inset-bottom, 0px));
+}
+
+html {
+  -webkit-tap-highlight-color: transparent;
+  -webkit-text-size-adjust: 100%;
+}
+
+/* iOS standalone mode: account for status bar */
+@media all and (display-mode: standalone) {
+  #app {
+    padding-top: env(safe-area-inset-top, 0px);
+  }
 }

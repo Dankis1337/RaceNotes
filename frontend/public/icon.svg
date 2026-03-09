@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" rx="96" fill="#83C082"/>
+  <g transform="translate(256,256)">
+    <!-- Flag pole -->
+    <rect x="-8" y="-140" width="16" height="220" rx="4" fill="white"/>
+    <!-- Flag -->
+    <polygon points="-8,-140 120,-110 -8,-70" fill="white" opacity="0.9"/>
+    <!-- Notebook lines -->
+    <rect x="-100" y="100" width="200" height="6" rx="3" fill="white" opacity="0.7"/>
+    <rect x="-100" y="120" width="160" height="6" rx="3" fill="white" opacity="0.5"/>
+    <rect x="-100" y="140" width="180" height="6" rx="3" fill="white" opacity="0.3"/>
+  </g>
+</svg>
