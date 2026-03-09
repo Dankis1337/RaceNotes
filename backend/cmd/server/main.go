@@ -43,6 +43,7 @@ func main() {
 	setupHandler := handlers.NewSetupHandler(setupService)
 	raceService := services.NewRaceService(db)
 	raceHandler := handlers.NewRaceHandler(raceService)
+	calcHandler := handlers.NewCalculatorHandler()
 
 	r := gin.Default()
 
@@ -90,6 +91,12 @@ func main() {
 		races.GET("/:id", raceHandler.GetByID)
 		races.PUT("/:id", raceHandler.Update)
 		races.DELETE("/:id", raceHandler.Delete)
+	}
+
+	calculator := api.Group("/calculator")
+	calculator.Use(middleware.AuthRequired())
+	{
+		calculator.POST("/tire-pressure", calcHandler.Calculate)
 	}
 
 	log.Printf("Server starting on port %s", port)
