@@ -49,3 +49,10 @@ Race: id, user_id, name, date, type (Road/MTB/Gravel/Cyclocross/Track), photo (n
 - Vue: script setup, Tailwind, API через src/api/
 - Git: коммиты по-английски, push после каждой фазы
 - PostgreSQL через docker-compose, для локальной разработки тоже
+
+## Перед каждым коммитом
+- Запусти тесты бэкенда: `cd backend && go test ./...`
+- Запусти тесты фронтенда: `cd frontend && npm test`
+- Если тесты падают — исправь прежде чем коммитить
+- Проверь что бэкенд компилируется: `cd backend && go build ./...`
+- Проверь что фронтенд билдится: `cd frontend && npm run build`
